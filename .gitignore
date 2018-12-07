@@ -1,0 +1,9 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+setteings/local.py
+src/tweetme/db.sqlite3
+media
+src/static_storage
+src/tweetme/static_serve
