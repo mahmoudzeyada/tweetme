@@ -5,7 +5,7 @@ from .forms import TweetModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import UserRequiredMixin ,UserownerMixin
 from django.urls import reverse_lazy
-
+from django.db.models import Q
 
 #details for object
 class TweeteDetailView(DetailView):
@@ -14,6 +14,14 @@ class TweeteDetailView(DetailView):
 #list objects
 class TweetListView(ListView):
     model=Tweet
+    def get_queryset(self,*args,**kargws):
+        qs=super().get_queryset()
+        search_word=self.request.GET.get("search_word")
+        if search_word is not None:
+            qs=qs.filter(Q(content__icontains=search_word)|
+                        Q(user__username__icontains=search_word))
+
+        return qs
 #create object
 class TweetCreateView(CreateView,UserRequiredMixin,LoginRequiredMixin):
     model=Tweet
@@ -33,4 +41,4 @@ class TweetDeleteView(UserownerMixin,LoginRequiredMixin,DeleteView):
     model=Tweet
     form_class=TweetModelForm
     success_url=reverse_lazy("tweets:list")
-    login_url='admin/'
+login_url='admin/'
