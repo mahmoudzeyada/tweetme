@@ -1,1 +1,6 @@
-{{object.content}}
+{%extends "base.html"%}
+{%block title%} {{block.super}} | TWEETS {%endblock title%}
+{%block content%}{{object.content}}<br/>
+by :{{object.user}} |{{object.timestamp | timesince }} ago
+
+{%endblock content%}
