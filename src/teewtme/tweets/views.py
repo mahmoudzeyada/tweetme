@@ -22,23 +22,29 @@ class TweetListView(ListView):
                         Q(user__username__icontains=search_word))
 
         return qs
+    def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+         context["create_form"]=TweetModelForm()
+         context["create_url"]=reverse_lazy("tweets:create")
+         return context
+
 #create object
 class TweetCreateView(CreateView,UserRequiredMixin,LoginRequiredMixin):
     model=Tweet
     fields=["content"]
-    success_url="/tweet/create"
+    #success_url=reverse_lazy("tweets:details")
     template_name='tweets/create_view.html'
     login_url='admin/'
 #update object
 class TweetUpdateView(UserownerMixin,LoginRequiredMixin,UpdateView):
     model=Tweet
     form_class=TweetModelForm
-    success_url=reverse_lazy("tweets:list")
+    #success_url=reverse_lazy("tweets:details")
     template_name='tweets/update_view.html'
     login_url='admin/'
 #delete object
 class TweetDeleteView(UserownerMixin,LoginRequiredMixin,DeleteView):
     model=Tweet
     form_class=TweetModelForm
-    success_url=reverse_lazy("tweets:list")
+    #success_url=reverse_lazy("tweets:list")
 login_url='admin/'
