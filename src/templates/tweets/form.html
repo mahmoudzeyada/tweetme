@@ -1,5 +1,7 @@
 <form class="form-group" action="{%if action_url%}{{action_url}}{%endif%}" method="post">
+  <div class="form-group">
   {%csrf_token%}
   {{form.as_p}}
-  <input type="submit" value={{btn_title}} />
+  <button type="submit" class="btn btn-primary">{{btn_title}}</button>
+  </div>
   </form>

@@ -1,36 +1,42 @@
 {%extends "base.html"%}
 {%block title%} {{block.super}} | SEARCH TWEETS {%endblock title%}
 {%block content%}
+  <div class='row'>
+    <div class="col-sm-3 col-xs-12">
 
+            <h1>{{request.user}}</h1>
+    </div>
+    <div class="col-sm-9">
+          {%if not request.GET.search_word%}
 
-  {%if not request.GET.search_word%}
+            {%include "tweets/form.html" with form=create_form action_url=create_url btn_title="tweet"%}
+            <hr />
 
+          {%endif%}
 
-      {%include "tweets/form.html" with form=create_form action_url=create_url btn_title="tweet"%}
+          {%for object in object_list%}
 
-  {%endif%}
+          <div class="media">
+          <div class="media-left media-middle">
+            {%if object.img%}
+            <a href="#">
+              <img class="media-object" src="..." alt="...">
+            </a>
+            {%endif%}
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{object.content}}</h4><br />
+            by {{object.user}}|{{object.timestamp|timesince}} ago |<a href="{{object.get_absolute_url}}">View</a>|<a href="{%url "tweets:update" object.id %}">Edit</a>
+            |<a href="{%url "tweets:delete" object.id%}">Delete</a>
+            <br />
+            <hr />
 
-{%for object in object_list%}
-<div class="row">
-  <div class="col-sm-12 text-center">
+          </div>
+          </div>
 
-
-<div class="media">
-
-  <div class="media-body">
-    <h4 class="media-heading">{{object.content}}</h4><br>
-    by :{{object.user}} |{{object.timestamp | timesince }} ago |<a href=" {% url "tweets:details" object.id %}" > View</a> <br />
-    <hr />
-
-
+              {% empty %}
+              <li>No Tweets yet.</li>
+              {%endfor%}
+              {%endblock content%}
+    </div>
   </div>
-  </div>
-  </div>
-</div>
-</div>
-<br />
-{% empty %}
-
-    <li>No Tweets yet.</li>
-{%endfor%}
-{%endblock content%}

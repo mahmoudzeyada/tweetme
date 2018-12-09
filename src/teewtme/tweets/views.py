@@ -31,7 +31,8 @@ class TweetListView(ListView):
 #create object
 class TweetCreateView(CreateView,UserRequiredMixin,LoginRequiredMixin):
     model=Tweet
-    fields=["content"]
+    form_class=TweetModelForm
+
     #success_url=reverse_lazy("tweets:details")
     template_name='tweets/create_view.html'
     login_url='admin/'
@@ -46,5 +47,5 @@ class TweetUpdateView(UserownerMixin,LoginRequiredMixin,UpdateView):
 class TweetDeleteView(UserownerMixin,LoginRequiredMixin,DeleteView):
     model=Tweet
     form_class=TweetModelForm
-    #success_url=reverse_lazy("tweets:list")
+    success_url=reverse_lazy("tweets:list")
 login_url='admin/'
