@@ -1,15 +1,18 @@
 
 class UserRequiredMixin(object):
-    def form_vaild(self,form):
+    def form_valid(self,form):
+        #import ipdb; ipdb.set_trace()
+       
         if self.request.user.is_authenticated():
-            form.instance.created_by=self.request.user
-            return super().form_vaild(form)
+            form.instance.user=self.request.user
+            print("yes")
+            return super().form_valid(form)
         else:
+            print("no")
             form.add_error(None,"it must be user")
-            return super().form_invaild(form)
+            return super().form_invalid(form) 
 
-
-class UserownerMixin(UserRequiredMixin , object):
+class UserownerMixin(UserRequiredMixin,object):
     def form_valid(self,form):
         if self.request.user==form.instance.user:
             #print ("yes")

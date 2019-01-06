@@ -28,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tweets'
+    'rest_framework',
+    'tweets',
+    'accounts'
 
 ]
 
@@ -115,3 +117,5 @@ STATICFILES_DIRS=[
 os.path.join(os.path.dirname(BASE_DIR),"static_storage")
 ]
 STATIC_ROOT= os.path.join(BASE_DIR,"static-serve")
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

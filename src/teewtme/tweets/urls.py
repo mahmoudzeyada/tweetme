@@ -10,7 +10,8 @@ urlpatterns = [
     url(r"^(?P<pk>\d+)/$",TweeteDetailView.as_view(),name="details"),
     url(r"^create/$",TweetCreateView.as_view(),name="create"),
     url(r"^(?P<pk>\d+)/update/$",TweetUpdateView.as_view(),name="update"),
-    url(r"^(?P<pk>\d+)/delete/$",TweetDeleteView.as_view(),name="delete")
+    url(r"^(?P<pk>\d+)/delete/$",TweetDeleteView.as_view(),name="delete"),
+    
 
 
 

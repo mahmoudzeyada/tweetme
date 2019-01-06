@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import UserRequiredMixin ,UserownerMixin
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.contrib.auth.forms import UserCreationForm
+
 
 #details for object
 class TweeteDetailView(DetailView):
@@ -29,23 +31,31 @@ class TweetListView(ListView):
          return context
 
 #create object
-class TweetCreateView(CreateView,UserRequiredMixin,LoginRequiredMixin):
+class TweetCreateView(LoginRequiredMixin,UserRequiredMixin,CreateView):
     model=Tweet
     form_class=TweetModelForm
 
     #success_url=reverse_lazy("tweets:details")
     template_name='tweets/create_view.html'
-    login_url='admin/'
+    login_url='/accounts/login/'
+   
+    
 #update object
-class TweetUpdateView(UserownerMixin,LoginRequiredMixin,UpdateView):
+class TweetUpdateView(LoginRequiredMixin,UserownerMixin,UpdateView):
     model=Tweet
     form_class=TweetModelForm
     #success_url=reverse_lazy("tweets:details")
     template_name='tweets/update_view.html'
     login_url='admin/'
 #delete object
-class TweetDeleteView(UserownerMixin,LoginRequiredMixin,DeleteView):
+class TweetDeleteView(LoginRequiredMixin,UserownerMixin,DeleteView):
     model=Tweet
     form_class=TweetModelForm
     success_url=reverse_lazy("tweets:list")
-login_url='admin/'
+    login_url='admin/'
+#resgstration object
+
+class Registeration (CreateView):
+    template_name='registration/register.html'
+    form_class=UserCreationForm
+    success_url=reverse_lazy('sucess_register')
