@@ -7,15 +7,16 @@ from .mixins import UserRequiredMixin ,UserownerMixin
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
-
+from django.http import HttpResponseRedirect, HttpResponse
 
 #details for object
 class TweeteDetailView(DetailView):
     model=Tweet
 
 #list objects
-class TweetListView(ListView):
+class TweetListView(LoginRequiredMixin,ListView):
     model=Tweet
+    login_url='/accounts/login/'
     def get_queryset(self,*args,**kargws):
         qs=super().get_queryset()
         search_word=self.request.GET.get("search_word")
@@ -48,11 +49,21 @@ class TweetUpdateView(LoginRequiredMixin,UserownerMixin,UpdateView):
     template_name='tweets/update_view.html'
     login_url='admin/'
 #delete object
-class TweetDeleteView(LoginRequiredMixin,UserownerMixin,DeleteView):
+class TweetDeleteView(DeleteView):
     model=Tweet
     form_class=TweetModelForm
     success_url=reverse_lazy("tweets:list")
     login_url='admin/'
+    def delete(self,request,*args,**kwargs):
+        self.object=self.get_object()
+        not_user=False
+        if self.object.user == self.request.user :
+            return super().delete(self,request,*args,**kwargs)
+        else:
+            not_user=True
+            return render(request,"tweets/tweet_confirm_delete.html",{"object":self.object,"not_user":not_user})
+
+
 #resgstration object
 
 class Registeration (CreateView):

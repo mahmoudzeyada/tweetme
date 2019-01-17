@@ -15,10 +15,10 @@ class UserRequiredMixin(object):
 class UserownerMixin(UserRequiredMixin,object):
     def form_valid(self,form):
         if self.request.user==form.instance.user:
-            #print ("yes")
+            print ("yes")
             return super().form_valid(form)
 
         else:
-            #print ("no")
+            print ("no")
             form.add_error(None,"this user is not allowed to change")
             return self.form_invalid(form)
