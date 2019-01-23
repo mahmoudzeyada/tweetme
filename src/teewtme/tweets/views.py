@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from tweets.models import Tweet
+from django.shortcuts import render, get_object_or_404
+from tweets.models import Tweet , Like
 from  django.views.generic import DetailView ,ListView , CreateView ,UpdateView,DeleteView
 from .forms import TweetModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect, HttpResponse
-
+from django.views import View
 #details for object
 class TweeteDetailView(DetailView):
     model=Tweet
@@ -63,10 +63,66 @@ class TweetDeleteView(DeleteView):
             not_user=True
             return render(request,"tweets/tweet_confirm_delete.html",{"object":self.object,"not_user":not_user})
 
+class PreferanceView(View):
 
-#resgstration object
+    template_name="tweets/test.html"
+    def get (self,request,*args,**kwargs):
+        tweet_id=self.kwargs["tweet_id"]
+        tweet=get_object_or_404(Tweet,id=tweet_id)
+        return render(request,self.template_name,{"tweet":tweet})
 
-class Registeration (CreateView):
-    template_name='registration/register.html'
-    form_class=UserCreationForm
-    success_url=reverse_lazy('sucess_register')
+
+    def post(self,request,*args,**kwargs):
+        tweet_id=self.kwargs["tweet_id"]
+        type_like =int(self.kwargs["type_like"])
+        tweet=get_object_or_404(Tweet,id=tweet_id)
+        try:
+            like=Like.objects.get(user=request.user,tweet=int(tweet_id))
+            model_type_like =like.type_like
+            if type_like  != model_type_like  :
+                like.delete()
+                user_like=Like()
+                user_like.user=request.user
+                user_like.tweet=tweet
+                user_like.type_like=type_like 
+                if type_like ==1 and model_type_like !=1 :
+                    tweet.likes+=1
+                    tweet.dislikes-=1
+                elif type_like ==2 and model_type_like !=2:
+                    tweet.likes-=1
+                    tweet.dislikes+=1
+                user_like.save()
+                tweet.save()
+                return render(request,self.template_name,{"tweet":tweet})
+            elif type_like  == model_type_like  :
+                like.delete()
+                if type_like == 1 :
+                    tweet.likes-=1
+                elif type_like == 2:
+                    tweet.dislikes -=1
+                tweet.save()
+                return render(request,self.template_name,{"tweet":tweet})
+        except Like.DoesNotExist:
+            like=Like()
+            like.user=request.user
+            like.tweet=tweet
+            like.type_like=type_like 
+            if type_like ==1 :
+                tweet.likes+=1
+            elif type_like  ==2 :
+                tweet.dislikes+=1
+            like.save()
+            tweet.save()
+            return render(request,self.template_name,{"tweet":tweet})
+        
+
+            
+
+
+        
+        
+
+
+
+
+
