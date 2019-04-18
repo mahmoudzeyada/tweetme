@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'tweets',
     'accounts'
+    #'like_button',
 ]
 
 MIDDLEWARE = [
@@ -114,3 +115,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# FACEBOOK_APP_ID = "tweets"
+# FACEBOOK_SHOW_SEND = True   # or "false, default is "true"
+# FACEBOOK_LIKE_WIDTH = 450  # "numeric value for width", default is 450
+# FACEBOOK_SHOW_FACES = True  # or "false, default is "true"
+# FACEBOOK_FONT = "arial"        # default is "arial"

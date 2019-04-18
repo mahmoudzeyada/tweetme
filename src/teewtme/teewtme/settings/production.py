@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'tweets',
-    'accounts'
+    'accounts',
+    #'like_button',
 ]
 
 MIDDLEWARE = [
