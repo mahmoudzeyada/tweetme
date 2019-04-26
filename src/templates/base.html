@@ -1,28 +1,65 @@
 <!DOCTYPE html>
 {%load static%}
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{%block title%} tweetme {%endblock title%} </title>
+<style>
+  .red-color {
+    color: red;
+  }
 
-    <!-- Bootstrap -->
-    <link href="{%static "bootstrap/css/bootstrap.min.css"%}" rel="stylesheet">
-    {%include "tweets/navbar.html"%}
-    <div class="container">
+  .grey-color {
+    color: gray;
+  }
+</style>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>{%block title%} tweetme {%endblock title%} </title>
+
+  <!-- Bootstrap -->
+  <link href="{%static "bootstrap/css/bootstrap.min.css"%}" rel="stylesheet">
+  {%include "tweets/navbar.html"%}
+  <div class="container">
     {%block content%} {%endblock content%}
-    </div>
+  </div>
 
 
-  </head>
-  <body>
+</head>
+
+<body>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{static "bootstrap/js/bootstrap.min.js"}"></script>
-  </body>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="{%static "bootstrap/js/bootstrap.min.js"%}"></script>
+  <script>
+    $(document).ready(function () {
+      var timer;
+      var doneTimer = 500;
+      var searchInput = $("#search-form input[type=text]");
+      var searchQuery;
+      searchInput.keyup(function (event) {
+
+        searchQuery = $(this).val();
+        timer = setTimeout(searching, doneTimer);
+      })
+      searchInput.keydown(function (event) {
+        clearTimeout(timer);
+      })
+
+      function searching() {
+        if (searchQuery) {
+          var url = '/tweet/search/?search=' + searchQuery;
+          document.location.href = url;
+        }
+
+      }
+    })
+  </script>
+  {%block script%}{%endblock%}
+</body>
+
 </html>

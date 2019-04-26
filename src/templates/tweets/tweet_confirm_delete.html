@@ -1,8 +1,15 @@
 {%extends "base.html"%}
 {%block title%} {{block.super}} | DELETE {%endblock title%}
 {%block content%}
+{%if not_user%}
+
+<p>you are not allowed to delete this tweet because  it's {{object.user}} 's tweet </p>
+
+{%else%}
 <form method="post">{% csrf_token %}
+        
     <p>Are you sure you want to delete "{{ object.content }}"?</p>
     <input type="submit" value="Confirm">
 </form>
+{%endif%}
 {%endblock content%}
