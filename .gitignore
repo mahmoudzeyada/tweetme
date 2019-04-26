@@ -7,5 +7,5 @@ src/tweetme/db.sqlite3
 media
 src/static_storage
 src/tweetme/static_serve
-venv
+venv/
 .vscode
