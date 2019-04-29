@@ -1,0 +1,22 @@
+{%extends "base.html"%}
+{%block title%} {{block.super}} | {{user.username}} {%endblock title%}
+{%block content%}<br />
+<div class='row'>
+    <div class="col-sm-3 col-xs-12">
+        <h1>{{request.user}}</h1>
+    </div>
+    <div class="col-sm-9 col-xs-12">
+        {%for tweet in user.tweet_set.all%}
+        <div class="media">
+            <div class="media-body">
+                {{tweet.content}}<br />
+
+            </div>
+        </div>
+        <hr />
+        {%endfor%}
+    </div>
+</div>
+
+
+{%endblock content%}
