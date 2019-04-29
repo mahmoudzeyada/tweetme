@@ -14,6 +14,8 @@
   $(document).ready(function () {
     var query = $.urlParam("search");
     var tweetlist = [];
+    var tweetLinkNext;
+    var url;
 
     function attach_tweets(value, append) {
 
@@ -22,12 +24,13 @@
       var TweetContent = value.content;
       var TweetTimeSince = value.time_since;
       var TweetDateDisplay = value.date_display;
+      var TweetOwner = value.url;
       var TweetFormat = "<div class=\"media\">" + "<div class=\"media-body\">" +
         "<h4 class=\"media-heading\">" + TweetContent + "<\h4>" +
-        "<br />" + " via " + "|" +
-        "<a href='#'>View</a>" + "<br />" + "<h6>" + TweetTimeSince +
+        "<br />" + "<h5>" + " via <a href=' " + TweetOwner + "'>" + TweetUser.username +
+        "</a> |" + "<a href='#'> View</a>" + "<\h5><br />" + "<h6>" + TweetTimeSince +
         " at " + TweetDateDisplay + "</h6></div></div><hr />"
-      $("#tweet").append(TweetFormat);
+
       if (append == true) {
         $("#tweet").append(TweetFormat);
       } else {
@@ -43,6 +46,7 @@
         );
       } else {
         $.each(data, function (key, value) {
+
           attach_tweets(value, true);
         });
       };
@@ -50,27 +54,37 @@
 
 
 
-    function fetch_tweets() {
+    function fetch_tweets(url) {
+      if (!(url)) {
+        url = "/api/tweet/"
+      }
+
       $.ajax({
-        url: "/api/tweet/",
+        url: url,
         data: {
           "search": query
+
         },
         method: "GET",
         success: function (data) {
           console.log(data)
-          parsetweet(data);
+          if (data.next) {
+            tweetLinkNext = data.next;
+          } else {
+            $("#load-more").css("display", "none")
+          }
+          parsetweet(data.results);
 
         },
 
         error: function (data) {
-          console.log(error)
+          console.log("error")
           console.log(data);
         }
 
       })
     }
-    fetch_tweets();
+    fetch_tweets(url);
     var charsStart = 140;
     var charsCount = 0;
 
@@ -124,6 +138,12 @@
       }
 
     })
+
+    $("#load-more").click(function (event) {
+      if (tweetLinkNext) {
+        fetch_tweets(tweetLinkNext);
+      }
+    })
   })
 </script>
 {%endblock%}
@@ -146,6 +166,10 @@
 
     {%endif%}
     <div id="tweet"></div>
+    <button type="submit" id="load-more" class="btn btn-info"> more tweets</button>
+    <br />
+    <br />
+
 
 
     {%endblock content%}
